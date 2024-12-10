@@ -3,9 +3,13 @@
 import { MessageList } from "./message-list";
 import { Button } from "@/components/ui/button";
 import messages from "./messages.json";
+import { generateSummary } from "./actions";
 import { useState } from "react";
 
 export default function Home() {
+  const [summary, setSummary] = useState<Awaited<
+    ReturnType<typeof generateSummary>
+  > | null>(null);
   const [loading, setLoading] = useState(false);
   return (
     <main className="mx-auto max-w-2xl pt-8">
@@ -17,10 +21,11 @@ export default function Home() {
           onClick={async () => {
             setLoading(true);
             // generate summary
+            setSummary(await generateSummary(messages));
             setLoading(false);
           }}
         >
-          Summary
+          Summar{loading ? "izing..." : "ize"}
         </Button>
       </div>
       <MessageList messages={messages} />
